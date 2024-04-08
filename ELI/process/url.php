@@ -3,7 +3,7 @@ $defaut = "index.php";
 $opage = "page.php";
 $afterlogout = "index.php";
 if(!isset($_GET['url'])){
-	$_GET['url'] = index.php;
+	$_GET['url'] = "index.php";
 }
 $page = explode('/',str_replace(_BASEURL_,'',@$_GET['url']) );
 //print_r($page);

@@ -356,15 +356,15 @@ class REQUEST {
 	}
 
 	// File Upload Optimised way
-	function savePicture($posteddata,$destinationdir,$id=""){
+	function savePicture($posteddata,$destinationdir,$id="",$multiple=false){
 		$saved = 0;
 		$idata = $posteddata;
             $imgdatas = json_decode("[".$posteddata."]",true);
 
-// ------------
+	// ------------
 
                 $dirfolder = $destinationdir;
-                if(count($imgdatas) > 1){
+                if(count($imgdatas) > 1 OR $multiple){
                 	$dir = "$dirfolder/".$id."/";
                 }
                 else
@@ -385,7 +385,7 @@ class REQUEST {
                         $i++;
                         $ext2 = explode("/",$imgdata['type']);
                         $ext = end($ext2);
-                        if(count($imgdatas) == 1){
+                        if(count($imgdatas) == 1 AND $multiple==false){
                         	$file = $id.".".$ext;
                         }
                         else

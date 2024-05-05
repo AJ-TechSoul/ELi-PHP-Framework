@@ -76,7 +76,10 @@ function getDataURI($image, $mime = '') {
 
         if(count($data_array) > 0){
             foreach ($data_array as $key => $value) {
-                $template = str_ireplace("{{".$key."}}",$value,$template);
+                if ($value !== null) {
+                    $template = str_ireplace("{{".$key."}}",$value,$template);
+                }
+                
             }
             if($return){
                 return $template;

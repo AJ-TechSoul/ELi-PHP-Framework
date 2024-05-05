@@ -13,14 +13,11 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aj-techsoul/ELICSS@3.7.1/eli.css" />
+    <base href="<?php echo _BASEURL_; ?>" >
     <meta name="keywords" content="<?php echo @$c['keyword']; ?>">
     <meta name="description" content="<?php  echo @$c['description']; ?>">
-    <script defer="" src="https://cdn.jsdelivr.net/gh/aj-techsoul/ELICSS@3.7.1/eli.min.js"></script>
 </head>
-
 <body>
   <main>
 
@@ -41,6 +38,8 @@
 
 
   </main>
+
+  <script src="assets/elicss-main/eli.js"></script>
 </body>
 
 </html>

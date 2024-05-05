@@ -4,11 +4,30 @@ $ValidateEmail = true; // VALIDATE EMAIL (true/false)
 $v = new VALIDATOR;
 $mail = new MAILER;
 $db = new DATABASE;
+$req = new REQUEST;
 $postedpage = $page[1];
 
 
 switch ($postedpage)
 {
+case "addusers":
+        $tbl = "users";
+        $formdata = $v->need("name,email,phone,password");
+        $formdata['password'] = md5($formdata['password']);
+        echo $req->addrow($tbl,$formdata,$required="name,email,phone,password",$unique="id",$successmsg="Successfully added data",$failmsg="Unable to add data",$duplicatemsg="Duplicate record found");
+    break;  
+
+case "editusers":
+        $tbl = "users";
+        $formdata = $v->need("id,name,email,phone");
+        echo $req->updaterow($tbl,$formdata,$required="id",$unique="id",$successmsg="Successfully updated data",$failmsg="Unable to update data",$duplicatemsg="Duplicate record found");
+    break;  
+
+
+   case "google":
+        $google = new GOOGLE;   
+        $google->glogin($page[2]);
+    break; 
 
 	case "signup":
                 if (isset($_POST) && $v->required_fields("name,email,phone,password,cpassword") &&
@@ -219,7 +238,7 @@ case "STATUS_UPDATE":
 
     
     case "delrow":
-        if(isset($_SESSION['user']['id']) && isset($page[2]) && isset($_POST['id']) &&  is_numeric($_POST['id']) && check_csrf($csrf_got))
+        if(isset($_SESSION['user']['id']) && isset($page[2]) && isset($_POST['id']) &&  is_numeric($_POST['id']))
         {
             $id = $_POST['id'];
                        // DELETE

@@ -35,28 +35,14 @@ foreach($classes as $c)
 <?php
 	function csrf()
     {
-        if(!isset($_SESSION)){
-        session_start();
-        $_SESSION['formStarted'] = true;
-        }
-        if (!isset($_SESSION['token']))
-        {
-            $token = md5(date('Y-m-d-H-i').uniqid(rand(), TRUE));
-            $_SESSION['token'] = $token;            
-        }
-        return @$_SESSION['token'];
+        $s = new SECURITY;
+        return $s->csrf();
     }
 
 	function check_csrf($csrf_got)
     {
-        if ($_SESSION['token'] == $csrf_got)
-        {
-            return TRUE;
-        }
-        else
-        {
-            return FALSE;
-        }
+        $s = new SECURITY;
+        return $s->check_csrf($csrf_got);
     }
 
 /**

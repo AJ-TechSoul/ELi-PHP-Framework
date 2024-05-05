@@ -4,11 +4,17 @@
 //------------------------------------
 
 # USER DATABASE
-$GLOBALS['USER']['config']['dbtype'] = "mysql"; // mysql,sqlite
+// $GLOBALS['USER']['config']['dbtype'] = "mysql"; // mysql,sqlite
+// $GLOBALS['USER']['config']['dbhost'] = "localhost"; // FOR SQLITE, Please mention SQLlite File Path
+// $GLOBALS['USER']['config']['dbuser'] = "root";
+// $GLOBALS['USER']['config']['dbpass'] = "";
+// $GLOBALS['USER']['config']['dbname'] = "";// FOR SQLITE, Please mention SQLlite File Path
+$GLOBALS['USER']['config']['dbtype'] = "sqlite"; // mysql,sqlite
 $GLOBALS['USER']['config']['dbhost'] = "localhost"; // FOR SQLITE, Please mention SQLlite File Path
-$GLOBALS['USER']['config']['dbuser'] = "root";
-$GLOBALS['USER']['config']['dbpass'] = "";
-$GLOBALS['USER']['config']['dbname'] = "";// FOR SQLITE, Please mention SQLlite File Path
+$GLOBALS['USER']['config']['dbuser'] = "admin";
+$GLOBALS['USER']['config']['dbpass'] = "admin";
+$GLOBALS['USER']['config']['dbname'] = "db/cmsv3";
+
 
 # CMS Database
 $GLOBALS['CMS']['config']['dbtype'] = "sqlite"; // mysql,sqlite
@@ -68,8 +74,8 @@ date_default_timezone_set("Asia/Kolkata");
 //echo date('d-m-Y h:i a'); //Returns IST
 //------------------------------------
 
-$freepages = "REGISTER,LOGIN,SIGNUP,contact.php,partner.php,test.php";
+$freepages = "REGISTER,LOGIN,SIGNUP,contact.php,partner.php,test.php,tool.php";
 
 // IMPORTANT TO SET
-$websitepath = "ELI-GROUP/ELi-PHP-Framework/";
+$websitepath = "rad/eli-php-framework-main/";
  ?>

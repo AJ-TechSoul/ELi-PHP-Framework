@@ -1,8 +1,9 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+header('Cache-Control: no-cache');
 header('Content-Type: application/json');
 
-$aid = base64_encode("ajib777");
+$aid = base64_encode("aj818");
 $csrf_got = @$_POST['csrf'];
 $validateEmail = false; // VALIDATE EMAIL (true/false)
 $url = page(PAGE);  
@@ -10,9 +11,13 @@ $v = new VALIDATOR;
 $db = new DATABASE;
 $enablelog = TRUE;
 $api = new API;
+$s = new SECURITY;
 
+$validkey = false;
 // working on API Key
-$apikey_default = (isset($_REQUEST['csrf']) && strlen($_REQUEST['csrf']) == 32) ? $_REQUEST['csrf'] : $api->getDefaultAPIKey();
+$apikey_default = (isset($_REQUEST['csrf']) && strlen($_REQUEST['csrf']) >= 32) ? $_REQUEST['csrf'] : $api->getDefaultAPIKey();
+
+// var_dump($_REQUEST['apikey'] == $apikey_default || $_SESSION['token'] == $apikey_default);
 
 if(isset($_REQUEST['apikey']) && strlen(@$_REQUEST['apikey']) == 32){
   // check for same server use
@@ -22,28 +27,30 @@ if($_REQUEST['apikey'] == $apikey_default){
 else
 {
    // Check API Key
-  $apikey = @$_REQUEST['apikey'];
+ $apikey = @$_REQUEST['apikey'];
  $chkapi = $db->query("SELECT * FROM apilicense WHERE license='$apikey' AND  expirydate >= date('now')
  ","CMS");
-  if(count($chkapi) > 0){
-      $validkey = true;
-  }
-  else
-  {
-    $validkey = false;
-  }
+    if(count($chkapi) > 0){
+        $validkey = true;
+    }
+    else
+    {
+      $validkey = false;
+    }
   }
 }
-elseif(check_csrf($apikey_default)){
+
+if(check_csrf($apikey_default) || $_SESSION['token'] == $apikey_default){
   // same origin // csrf check
   $validkey = true;
 }
-else
-{
-  $err['error'] = "No API Key Provided";
-  $err['success'] = false;
-  die(json_encode($err));
+
+// FREE CASES 
+$casefree = explode(",","currentcsrf");
+if(isset($url[1]) && in_array($url[1],$casefree)){
+  $validkey = true;
 }
+// =========
 
 if(!$validkey){
   $err['error'] = "API key is not valid";
@@ -56,6 +63,10 @@ if(!$validkey){
 /*  API CALL Example : http://domain.com/api/app/area/insert */
 
 switch (@$url[1]){
+
+  case "currentcsrf":
+    echo $s->csrf();
+  break;
 
   case "getprofilext":
     if(isset($_SESSION['user']['id']) && $url[1]!=""){
@@ -182,8 +193,7 @@ break;
   case "test":
     $tbl = "users";
     $res = $db->query("SELECT * FROM $tbl WHERE 1");
-    echo "<pre>";
-    print_r($res);
+    echo json_encode($res);
   break;
 
 

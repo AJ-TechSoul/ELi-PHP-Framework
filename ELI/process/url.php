@@ -8,6 +8,8 @@ if(!isset($_GET['url'])){
 $page = explode('/',str_replace(_BASEURL_,'',@$_GET['url']) );
 //print_r($page);
 
+
+
 switch ($page[0]){
 
         case "p":
@@ -105,6 +107,10 @@ switch ($page[0]){
 
         if(isset($_GET['url']) && file_exists($pageurl) && $_GET['url']!="" )
         {
+            if(isset($_SESSION['ssetoken'])){
+              unset($_SESSION['ssetoken']);
+            }
+
             if(!in_array($PG,$avoid))
             {
               if(in_array($PG, $free)){

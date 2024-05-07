@@ -27,7 +27,7 @@ CLASS SECURITY
 
   function decrypt($token,$return=true){
 
-      if(strlen(trim($token)) > 0){
+      if(isset($token) && strlen(trim($token)) > 0){
           $sn = -1;  
           $splitnumber = substr($token,-32);
           if(strlen($splitnumber)==32){
@@ -87,7 +87,7 @@ CLASS SECURITY
 
   function check_csrf($csrf_got)
     {
-        if ($_SESSION['token'] == self::decrypt($csrf_got))
+        if($_SESSION['token'] == self::decrypt($csrf_got) OR $_SESSION['token'] == $csrf_got)
         {
             return TRUE;
         }

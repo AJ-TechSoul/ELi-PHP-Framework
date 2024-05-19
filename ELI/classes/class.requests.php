@@ -415,6 +415,63 @@ class REQUEST {
                 return $saved;
 	}
 
+
+	function convertToJSON($input) {
+	    // Check if the input is a query string
+	    if (is_string($input) && preg_match('/^(\w+=[^&]*(&\w+=[^&]*)*)$/', $input)) {
+	        // Parse the query string into an associative array
+	        parse_str($input, $output);
+	        // Convert the array to JSON
+	        return json_encode($output);
+	    } elseif (is_array($input)) {
+	        // If the input is an array, convert it to JSON
+	        return json_encode($input);
+	    } else {
+	        return json_encode(["error" => "Invalid input"]);
+	    }
+	}
+
+	function formDataEncrypt($fd="",$return=false){
+		if(isset($fd)){
+			$s = new SECURITY;
+			$fdata = self::convertToJSON($fd);
+			$fdatax = json_decode($fdata,true);
+			$fdatax['csrf'] = $s->csrf();
+			$fdata = json_encode($fdatax);
+			$ret = $s->encrypt($fdata,$return=true);
+		}
+		else
+		{
+			$ret = "";
+		}
+		if(!$return){
+			return $ret;
+		}
+		else
+		{
+			echo $ret;
+		}
+	}
+	function formDataDecrypt($fd="",$return=false){
+		if(isset($fd)){
+			$s = new SECURITY;
+			$fdata = $s->decrypt($fd);
+			$ret = json_decode($fdata,true);
+		}
+		else
+		{
+			$ret = false;
+		}
+
+		if(!$return){
+			return $ret;
+		}
+		else
+		{
+			echo $ret;
+		}
+	}
+
 }
 
 ?>

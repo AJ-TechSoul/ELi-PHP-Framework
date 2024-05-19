@@ -10,6 +10,19 @@ $postedpage = $page[1];
 
 switch ($postedpage)
 {
+
+case "testformbtn":
+    $fdata = $req->formDataDecrypt($_POST['data']);
+    if(check_csrf(@$fdata['csrf'])){
+        // print_r($fdata);
+        echo "Success ".rand(1111,9999);
+    }
+    else
+    {
+        echo 0;
+    }
+break;
+	
 case "addusers":
         $tbl = "users";
         $formdata = $v->need("name,email,phone,password");

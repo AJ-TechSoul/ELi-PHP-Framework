@@ -489,6 +489,43 @@ if($debug==true)
 	@ini_set("display_errors", 0);
 }
 
+
+class MicroTimer {
+
+    private $startTime;
+    private $stopTime;
+
+    // Creates and starts a timer
+    public function __construct()
+    {
+        $this->startTime = microtime(true);
+        $this->stopTime = null; // Initialize stopTime to null
+    }
+
+    // Stops a timer
+    public function stop()
+    {
+        $this->stopTime = microtime(true);
+    }
+
+    // Returns the number of seconds from the timer's creation, or elapsed
+    // between creation and call to ->stop()
+    public function elapsed()
+    {
+        if (isset($this->stopTime)) {
+            return round($this->stopTime - $this->startTime, 4);
+        }
+
+        return round(microtime(true) - $this->startTime, 4);
+    }
+
+    // Called when using a MicroTimer object as a string
+    public function __toString()
+    {
+        return (string) $this->elapsed();
+    }
+}
+
 // start the timer to record page load time
 $pageTimer = new MicroTimer();
 
@@ -509,6 +546,28 @@ define("COOKIENAME", preg_replace('/[^a-zA-Z0-9_]/', '_', $cookie_name . '_' . V
 // stripslashes if MAGIC QUOTES is turned on
 // This is only a workaround. Please better turn off magic quotes!
 // This code is from http://php.net/manual/en/security.magicquotes.disabling.php
+
+
+function get_magic_quotes_gpc() {
+    // Recursive function to process arrays and strings
+    function stripslashes_deep($value)
+    {
+        if (is_array($value)) {
+            $value = array_map('stripslashes_deep', $value);
+        } elseif (is_string($value)) {
+            $value = stripslashes($value);
+        }
+        return $value;
+    }
+
+    // Process superglobals to simulate magic quotes
+    $_GET = stripslashes_deep($_GET);
+    $_POST = stripslashes_deep($_POST);
+    $_COOKIE = stripslashes_deep($_COOKIE);
+    $_REQUEST = stripslashes_deep($_REQUEST);
+}
+
+
 if (get_magic_quotes_gpc()) {
 	$process = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
 	while (list($key, $val) = each($process)) {
@@ -5639,42 +5698,10 @@ class Database
 			echo "COMMIT;\r\n";
 	}
 }
-//	class MicroTimer (issue #146)
-//	wraps calls to microtime(), calculating the elapsed time and rounding output
-//
-class MicroTimer {
 
-	private $startTime, $stopTime;
 
-	// creates and starts a timer
-	function __construct()
-	{
-		$this->startTime = microtime(true);
-	}
 
-	// stops a timer
-	public function stop()
-	{
-		$this->stopTime = microtime(true);
-	}
 
-	// returns the number of seconds from the timer's creation, or elapsed
-	// between creation and call to ->stop()
-	public function elapsed()
-	{
-		if ($this->stopTime)
-			return round($this->stopTime - $this->startTime, 4);
-
-		return round(microtime(true) - $this->startTime, 4);
-	}
-
-	// called when using a MicroTimer object as a string
-	public function __toString()
-	{
-		return (string) $this->elapsed();
-	}
-
-}
 //	class Resources (issue #157)
 //	outputs secondary files, such as css and javascript
 //	data is stored gzipped (gzencode) and encoded (base64_encode)

@@ -3,5 +3,6 @@
     "description": "Eli PHP Framework is for Quick PHP Website Development",
     "require": {
         "php": ">=7.3"
-    }
+    },
+    "license": "proprietary"
 }

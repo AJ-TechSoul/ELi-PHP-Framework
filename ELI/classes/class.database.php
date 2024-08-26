@@ -403,6 +403,8 @@ function query($sql,$config='')
 {
  try {
  $conn = self::connect_db($config);
+ if(!empty($sql)){
+
  $stmt = $conn->prepare($sql);
  $stmt->execute();
  // set the resulting array to associative
@@ -417,7 +419,8 @@ function query($sql,$config='')
     } else {
         echo "0 results";
     }
-  self::disconnect_db($config);
+  self::disconnect_db($config); 
+ }
 }
 catch (PDOException $err) {
     self::formatError($err);
